@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ControlLux360</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0d13;
+      --surface: #111620;
+      --surface2: #181e2e;
+      --accent: #f5c518;
+      --accent2: #e07b00;
+      --text: #eef0f5;
+      --muted: #6b7490;
+      --border: #1e2638;
+      --danger: #e05555;
+      --success: #3ecf8e;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245,197,24,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,197,24,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(245,197,24,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #screen-barrios {
+      position: relative; z-index: 1; min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 60px 24px 40px;
+    }
+
+    .logo-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 56px; animation: fadeDown 0.6s ease both;
+    }
+
+    .logo-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 16px; display: flex; align-items: center; justify-content: center;
+      font-size: 26px; margin-bottom: 16px;
+      box-shadow: 0 0 32px rgba(245,197,24,0.25);
+    }
+
+    .logo-title { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 3px; color: var(--text); line-height: 1; }
+    .logo-sub { font-size: 12px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; }
+
+    .section-label {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 24px;
+      animation: fadeDown 0.6s 0.1s ease both;
+    }
+
+    #barrios-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px; width: 100%; max-width: 900px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .barrio-btn {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px; cursor: pointer;
+      transition: all 0.2s ease; text-align: left; position: relative; overflow: hidden;
+    }
+
+    .barrio-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(245,197,24,0.06), transparent);
+      opacity: 0; transition: opacity 0.2s;
+    }
+
+    .barrio-btn:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(245,197,24,0.12); }
+    .barrio-btn:hover::before { opacity: 1; }
+    .barrio-btn-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+    .barrio-btn-name { font-size: 17px; font-weight: 600; color: var(--text); display: block; margin-bottom: 4px; }
+    .barrio-btn-meta { font-size: 12px; color: var(--muted); }
+    .barrio-btn-arrow { position: absolute; top: 20px; right: 20px; color: var(--muted); font-size: 18px; transition: transform 0.2s, color 0.2s; }
+    .barrio-btn:hover .barrio-btn-arrow { color: var(--accent); transform: translateX(4px); }
+
+    .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+    .empty-state p { margin-top: 12px; font-size: 14px; }
+
+    #screen-login {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(10,13,19,0.85); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center; animation: fadeIn 0.25s ease;
+    }
+
+    #screen-login.active { display: flex; }
+
+    .login-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 48px 40px; width: 100%; max-width: 420px;
+      position: relative; animation: scaleIn 0.3s ease;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+    }
+
+    .login-back {
+      position: absolute; top: 20px; left: 20px; background: none; border: none;
+      color: var(--muted); cursor: pointer; font-size: 22px; line-height: 1;
+      padding: 4px 8px; border-radius: 8px; transition: color 0.2s, background 0.2s;
+    }
+
+    .login-back:hover { color: var(--text); background: var(--border); }
+    .login-header { text-align: center; margin-bottom: 36px; }
+
+    .login-barrio-tag {
+      display: inline-block; background: rgba(245,197,24,0.1);
+      border: 1px solid rgba(245,197,24,0.25); color: var(--accent);
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
+    }
+
+    .login-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; color: var(--text); }
+    .login-subtitle { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+    .field { margin-bottom: 18px; }
+
+    .field label { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+
+    .field input, .field select {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field select option { background: var(--surface2); }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,197,24,0.1);
+    }
+
+    .btn-login {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 12px; color: #0a0d13;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.5px;
+      transition: opacity 0.2s, transform 0.2s; margin-top: 8px;
+    }
+
+    .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-login:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .login-error {
+      background: rgba(224,85,85,0.1); border: 1px solid rgba(224,85,85,0.3);
+      color: var(--danger); border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; margin-top: 16px; display: none;
+    }
+
+    .login-error.visible { display: block; }
+
+    #screen-admin { display: none; position: relative; z-index: 1; min-height: 100vh; flex-direction: column; }
+    #screen-admin.active { display: flex; }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 32px; border-bottom: 1px solid var(--border);
+      background: rgba(17,22,32,0.8); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .topbar-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--accent); }
+
+    .role-badge {
+      background: rgba(245,197,24,0.1); border: 1px solid rgba(245,197,24,0.2);
+      color: var(--accent); font-size: 11px; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+    }
+
+    .btn-logout {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); font-family: 'DM Sans', sans-serif;
+      font-size: 13px; padding: 8px 16px; border-radius: 10px;
+      cursor: pointer; transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-logout:hover { color: var(--danger); border-color: var(--danger); }
+
+    .admin-content { padding: 40px 32px; max-width: 1100px; margin: 0 auto; width: 100%; }
+
+    .admin-greeting { margin-bottom: 40px; animation: fadeDown 0.5s ease both; }
+
+    .admin-greeting h1 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; line-height: 1; }
+    .admin-greeting p { color: var(--muted); margin-top: 8px; font-size: 14px; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 40px; animation: fadeUp 0.5s 0.1s ease both; }
+
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 1px; color: var(--accent); line-height: 1; }
+
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 10px; color: #0a0d13;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+      padding: 10px 20px; cursor: pointer; transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .table-wrap {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      animation: fadeUp 0.5s 0.2s ease both; margin-bottom: 40px;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead th {
+      background: var(--surface2); padding: 14px 20px; text-align: left;
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); font-weight: 500;
+    }
+
+    tbody tr { border-top: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:hover { background: var(--surface2); }
+    tbody td { padding: 16px 20px; font-size: 14px; color: var(--text); }
+
+    .credits-bar-wrap { display: flex; align-items: center; gap: 12px; }
+    .credits-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .credits-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 0.5s ease; }
+    .credits-text { font-size: 13px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+
+    .badge-rol { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+    .badge-tecnico { background: rgba(62,207,142,0.1); color: var(--success); border: 1px solid rgba(62,207,142,0.25); }
+    .badge-intendente { background: rgba(245,197,24,0.1); color: var(--accent); border: 1px solid rgba(245,197,24,0.25); }
+    .badge-administrador { background: rgba(224,123,0,0.1); color: var(--accent2); border: 1px solid rgba(224,123,0,0.25); }
+
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,13,19,0.85); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px; width: 100%; max-width: 440px;
+      animation: scaleIn 0.25s ease; max-height: 90vh; overflow-y: auto;
+    }
+
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; margin-bottom: 24px; }
+
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+
+    .btn-secondary {
+      flex: 1; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--muted); font-family: 'DM Sans', sans-serif;
+      font-size: 14px; padding: 12px; cursor: pointer; transition: color 0.2s;
+    }
+
+    .btn-secondary:hover { color: var(--text); }
+
+    .msg-success {
+      background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.3);
+      color: var(--success); border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; margin-top: 16px; display: none;
+    }
+
+    .msg-success.visible { display: block; }
+
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeUp   { from { opacity: 0; transform: translateY(16px);  } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn  { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 60px auto; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      .login-card { padding: 36px 24px; margin: 16px; }
+      .admin-content { padding: 24px 16px; }
+      .topbar { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ PANTALLA 1: SELECTOR DE BARRIOS ══ -->
+<div id="screen-barrios">
+  <div class="logo-wrap">
+    <div class="logo-icon">💡</div>
+    <div class="logo-title">ControlLux360</div>
+    <div class="logo-sub">Sistema de Alumbrado Público</div>
+  </div>
+  <div class="section-label">Seleccioná tu barrio</div>
+  <div id="barrios-grid"><div class="spinner"></div></div>
+  <button onclick="abrirLoginAdmin()" style="
+    margin-top: 48px; background: none; border: 1px solid var(--border);
+    color: var(--muted); font-family: 'DM Sans', sans-serif;
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 10px 24px; border-radius: 20px; cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  " onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'"
+     onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
+    Acceso administrativo
+  </button>
+</div>
+
+<!-- ══ PANTALLA 2: LOGIN ══ -->
+<div id="screen-login">
+  <div class="login-card">
+    <button class="login-back" onclick="cerrarLogin()">←</button>
+    <div class="login-header">
+      <div class="login-barrio-tag" id="login-barrio-tag">Barrio</div>
+      <div class="login-title">Bienvenido</div>
+      <div class="login-subtitle">Ingresá tus credenciales para continuar</div>
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="tu@email.com" />
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" />
+    </div>
+    <button class="btn-login" id="btn-login" onclick="doLogin()">Ingresar</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ══ PANTALLA 3: DASHBOARD ADMINISTRADOR ══ -->
+<div id="screen-admin">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">ControlLux360</div>
+      <div class="role-badge">Administrador</div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+  <div class="admin-content">
+    <div class="admin-greeting">
+      <h1>Panel de Control</h1>
+      <p>Gestioná barrios, usuarios y el sistema completo.</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Barrios activos</div>
+        <div class="stat-value" id="stat-barrios">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Usuarios registrados</div>
+        <div class="stat-value" id="stat-usuarios">—</div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Barrios</div>
+      <button class="btn-primary" onclick="abrirModalBarrio()">+ Nuevo barrio</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Barrio</th><th>Créditos disponibles</th></tr></thead>
+        <tbody id="admin-barrios-tbody">
+          <tr><td colspan="2" style="text-align:center;color:var(--muted);padding:32px">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">Usuarios</div>
+      <button class="btn-primary" onclick="abrirModalUsuario()">+ Nuevo usuario</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nombre</th><th>Rol</th><th>Barrio asignado</th></tr></thead>
+        <tbody id="admin-usuarios-tbody">
+          <tr><td colspan="3" style="text-align:center;color:var(--muted);padding:32px">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: NUEVO BARRIO ══ -->
+<div class="modal-overlay" id="modal-barrio">
+  <div class="modal-card">
+    <div class="modal-title">Nuevo Barrio</div>
+    <div class="field">
+      <label>Nombre del barrio</label>
+      <input type="text" id="nuevo-barrio-nombre" placeholder="Ej: Los Pinos" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="cerrarModalBarrio()">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="crearBarrio()">Crear</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: NUEVO USUARIO ══ -->
+<div class="modal-overlay" id="modal-usuario">
+  <div class="modal-card">
+    <div class="modal-title">Nuevo Usuario</div>
+    <div class="field">
+      <label>Nombre completo</label>
+      <input type="text" id="nuevo-usuario-nombre" placeholder="Ej: Juan Pérez" />
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="nuevo-usuario-email" placeholder="juan@email.com" />
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="nuevo-usuario-password" placeholder="Mínimo 6 caracteres" />
+    </div>
+    <div class="field">
+      <label>Rol</label>
+      <select id="nuevo-usuario-rol" onchange="toggleBarrioSelect()">
+        <option value="">Seleccioná un rol</option>
+        <option value="tecnico">Técnico</option>
+        <option value="intendente">Intendente</option>
+      </select>
+    </div>
+    <div class="field" id="campo-barrio" style="display:none">
+      <label>Barrio asignado</label>
+      <select id="nuevo-usuario-barrio">
+        <option value="">Seleccioná un barrio</option>
+      </select>
+    </div>
+    <div class="login-error" id="usuario-error"></div>
+    <div class="msg-success" id="usuario-success">✓ Usuario creado correctamente.</div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="cerrarModalUsuario()">Cancelar</button>
+      <button class="btn-primary" style="flex:1" id="btn-crear-usuario" onclick="crearUsuario()">Crear usuario</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL  = 'https://rdizlbkvyryejgppymsh.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkaXpsYmt2eXJ5ZWpncHB5bXNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzI3MzAsImV4cCI6MjA5MzA0ODczMH0.YApCoK5KPXttwM7us7Lm3-adSZjTMrbcmGSX38d3lPU';
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  let barrioSeleccionado = null;
+  let barriosCache = [];
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      await mostrarDashboard(session.user);
+    } else {
+      await cargarBarrios();
+    }
+  });
+
+  async function cargarBarrios() {
+    const grid = document.getElementById('barrios-grid');
+    const { data, error } = await sb.from('barrios').select('*').order('nombre');
+    barriosCache = data || [];
+    if (error || !data?.length) {
+      grid.innerHTML = `<div class="empty-state">💡<p>No hay barrios registrados aún.<br>El administrador debe crear el primero.</p></div>`;
+      return;
+    }
+    grid.innerHTML = data.map((b, i) => `
+      <button class="barrio-btn" style="animation:fadeUp 0.5s ${i*0.06}s ease both"
+              onclick="seleccionarBarrio('${b.id}','${b.nombre}')">
+        <span class="barrio-btn-icon">🏘️</span>
+        <span class="barrio-btn-name">${b.nombre}</span>
+        <span class="barrio-btn-meta">${b.creditos_disponibles} créditos disponibles</span>
+        <span class="barrio-btn-arrow">→</span>
+      </button>
+    `).join('');
+  }
+
+  function seleccionarBarrio(id, nombre) {
+    barrioSeleccionado = { id, nombre };
+    document.getElementById('login-barrio-tag').textContent = nombre;
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-error').classList.remove('visible');
+    document.getElementById('screen-login').classList.add('active');
+    setTimeout(() => document.getElementById('login-email').focus(), 100);
+  }
+
+  function cerrarLogin() {
+    document.getElementById('screen-login').classList.remove('active');
+    barrioSeleccionado = null;
+  }
+
+  function abrirLoginAdmin() {
+    barrioSeleccionado = null;
+    document.getElementById('login-barrio-tag').textContent = 'Administrador';
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-error').classList.remove('visible');
+    document.getElementById('screen-login').classList.add('active');
+    setTimeout(() => document.getElementById('login-email').focus(), 100);
+  }
+
+  async function doLogin() {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btn      = document.getElementById('btn-login');
+    const errDiv   = document.getElementById('login-error');
+
+    if (!email || !password) return;
+    btn.disabled = true;
+    btn.textContent = 'Ingresando...';
+    errDiv.classList.remove('visible');
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      errDiv.textContent = 'Email o contraseña incorrectos.';
+      errDiv.classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = 'Ingresar';
+      return;
+    }
+
+    const { data: perfil } = await sb.from('perfiles').select('*').eq('id', data.user.id).single();
+
+    if (!perfil) {
+      errDiv.textContent = 'No se encontró tu perfil. Contactá al administrador.';
+      errDiv.classList.add('visible');
+      await sb.auth.signOut();
+      btn.disabled = false;
+      btn.textContent = 'Ingresar';
+      return;
+    }
+
+    if (perfil.rol !== 'administrador' && perfil.barrio_id !== barrioSeleccionado?.id) {
+      errDiv.textContent = 'No tenés acceso a este barrio.';
+      errDiv.classList.add('visible');
+      await sb.auth.signOut();
+      btn.disabled = false;
+      btn.textContent = 'Ingresar';
+      return;
+    }
+
+    document.getElementById('screen-login').classList.remove('active');
+    btn.disabled = false;
+    btn.textContent = 'Ingresar';
+    await mostrarDashboard(data.user, perfil);
+  }
+
+  async function mostrarDashboard(user, perfil = null) {
+    if (!perfil) {
+      const { data } = await sb.from('perfiles').select('*').eq('id', user.id).single();
+      perfil = data;
+    }
+    document.getElementById('screen-barrios').style.display = 'none';
+    if (perfil?.rol === 'administrador') {
+      document.getElementById('screen-admin').classList.add('active');
+      await cargarDatosAdmin();
+    }
+  }
+
+  async function cargarDatosAdmin() {
+    const [{ count: cBarrios }, { count: cUsuarios }, { data: barrios }, { data: usuarios }] = await Promise.all([
+      sb.from('barrios').select('*', { count: 'exact', head: true }),
+      sb.from('perfiles').select('*', { count: 'exact', head: true }),
+      sb.from('barrios').select('*').order('nombre'),
+      sb.from('perfiles').select('*, barrios(nombre)').order('nombre'),
+    ]);
+
+    barriosCache = barrios || [];
+    document.getElementById('stat-barrios').textContent  = cBarrios ?? '—';
+    document.getElementById('stat-usuarios').textContent = cUsuarios ?? '—';
+
+    const tbody = document.getElementById('admin-barrios-tbody');
+    tbody.innerHTML = !barrios?.length
+      ? `<tr><td colspan="2" style="text-align:center;color:var(--muted);padding:32px">No hay barrios aún.</td></tr>`
+      : barrios.map(b => {
+          const pct = Math.min(100, (b.creditos_disponibles / 100) * 100);
+          return `<tr>
+            <td><strong>${b.nombre}</strong></td>
+            <td>
+              <div class="credits-bar-wrap">
+                <div class="credits-bar"><div class="credits-bar-fill" style="width:${pct}%"></div></div>
+                <span class="credits-text">${b.creditos_disponibles} / 100</span>
+              </div>
+            </td>
+          </tr>`;
+        }).join('');
+
+    const tbodyU = document.getElementById('admin-usuarios-tbody');
+    tbodyU.innerHTML = !usuarios?.length
+      ? `<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:32px">No hay usuarios aún.</td></tr>`
+      : usuarios.map(u => `<tr>
+          <td><strong>${u.nombre}</strong></td>
+          <td><span class="badge-rol badge-${u.rol}">${u.rol}</span></td>
+          <td>${u.barrios?.nombre ?? '<span style="color:var(--muted)">Todos los barrios</span>'}</td>
+        </tr>`).join('');
+  }
+
+  function abrirModalBarrio() {
+    document.getElementById('nuevo-barrio-nombre').value = '';
+    document.getElementById('modal-barrio').classList.add('active');
+    setTimeout(() => document.getElementById('nuevo-barrio-nombre').focus(), 100);
+  }
+
+  function cerrarModalBarrio() {
+    document.getElementById('modal-barrio').classList.remove('active');
+  }
+
+  async function crearBarrio() {
+    const nombre = document.getElementById('nuevo-barrio-nombre').value.trim();
+    if (!nombre) return;
+    const { error } = await sb.from('barrios').insert({ nombre, creditos_disponibles: 100 });
+    if (!error) { cerrarModalBarrio(); await cargarDatosAdmin(); await cargarBarrios(); }
+  }
+
+  function abrirModalUsuario() {
+    ['nuevo-usuario-nombre','nuevo-usuario-email','nuevo-usuario-password'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('nuevo-usuario-rol').value = '';
+    document.getElementById('nuevo-usuario-barrio').value = '';
+    document.getElementById('campo-barrio').style.display = 'none';
+    document.getElementById('usuario-error').classList.remove('visible');
+    document.getElementById('usuario-success').classList.remove('visible');
+    document.getElementById('btn-crear-usuario').disabled = false;
+    document.getElementById('btn-crear-usuario').textContent = 'Crear usuario';
+
+    const sel = document.getElementById('nuevo-usuario-barrio');
+    sel.innerHTML = '<option value="">Seleccioná un barrio</option>';
+    barriosCache.forEach(b => sel.innerHTML += `<option value="${b.id}">${b.nombre}</option>`);
+
+    document.getElementById('modal-usuario').classList.add('active');
+    setTimeout(() => document.getElementById('nuevo-usuario-nombre').focus(), 100);
+  }
+
+  function cerrarModalUsuario() {
+    document.getElementById('modal-usuario').classList.remove('active');
+  }
+
+  function toggleBarrioSelect() {
+    const rol = document.getElementById('nuevo-usuario-rol').value;
+    document.getElementById('campo-barrio').style.display = rol ? 'block' : 'none';
+  }
+
+  async function crearUsuario() {
+    const nombre   = document.getElementById('nuevo-usuario-nombre').value.trim();
+    const email    = document.getElementById('nuevo-usuario-email').value.trim();
+    const password = document.getElementById('nuevo-usuario-password').value;
+    const rol      = document.getElementById('nuevo-usuario-rol').value;
+    const barrioId = document.getElementById('nuevo-usuario-barrio').value;
+
+    const errDiv = document.getElementById('usuario-error');
+    const sucDiv = document.getElementById('usuario-success');
+    errDiv.classList.remove('visible');
+    sucDiv.classList.remove('visible');
+
+    if (!nombre || !email || !password || !rol) {
+      errDiv.textContent = 'Completá todos los campos obligatorios.';
+      errDiv.classList.add('visible');
+      return;
+    }
+
+    if (!barrioId) {
+      errDiv.textContent = 'Seleccioná un barrio para este usuario.';
+      errDiv.classList.add('visible');
+      return;
+    }
+
+    const btn = document.getElementById('btn-crear-usuario');
+    btn.disabled = true;
+    btn.textContent = 'Creando...';
+
+    const { data: authData, error: authError } = await sb.auth.signUp({ email, password });
+
+    if (authError) {
+      errDiv.textContent = 'Error: ' + authError.message;
+      errDiv.classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = 'Crear usuario';
+      return;
+    }
+
+    const userId = authData.user?.id;
+    if (!userId) {
+      errDiv.textContent = 'No se pudo obtener el ID del usuario. Intentá de nuevo.';
+      errDiv.classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = 'Crear usuario';
+      return;
+    }
+
+    const { error: perfilError } = await sb.from('perfiles').insert({ id: userId, nombre, rol, barrio_id: barrioId });
+
+    if (perfilError) {
+      errDiv.textContent = 'Error al guardar perfil: ' + perfilError.message;
+      errDiv.classList.add('visible');
+      btn.disabled = false;
+      btn.textContent = 'Crear usuario';
+      return;
+    }
+
+    sucDiv.classList.add('visible');
+    btn.textContent = 'Crear usuario';
+    await cargarDatosAdmin();
+    setTimeout(() => cerrarModalUsuario(), 1500);
+  }
+
+  async function doLogout() {
+    await sb.auth.signOut();
+    document.getElementById('screen-admin').classList.remove('active');
+    document.getElementById('screen-barrios').style.display = 'flex';
+    await cargarBarrios();
+  }
+</script>
+</body>
+</html>
