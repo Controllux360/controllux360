@@ -22,85 +22,37 @@
       --success: #3ecf8e;
     }
 
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      overflow-x: hidden;
-    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
 
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(245,197,24,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(245,197,24,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(245,197,24,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,197,24,0.03) 1px, transparent 1px);
+      background-size: 40px 40px; pointer-events: none; z-index: 0;
     }
 
     body::after {
-      content: '';
-      position: fixed;
-      top: -200px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 400px;
+      content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px;
       background: radial-gradient(ellipse, rgba(245,197,24,0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
 
-    #screen-barrios {
-      position: relative; z-index: 1; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 60px 24px 40px;
-    }
+    /* ── PANTALLA BARRIOS ── */
+    #screen-barrios { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 60px 24px 40px; }
 
-    .logo-wrap {
-      display: flex; flex-direction: column; align-items: center;
-      margin-bottom: 56px; animation: fadeDown 0.6s ease both;
-    }
+    .logo-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 56px; animation: fadeDown 0.6s ease both; }
 
-    .logo-icon {
-      width: 56px; height: 56px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 16px; display: flex; align-items: center; justify-content: center;
-      font-size: 26px; margin-bottom: 16px;
-      box-shadow: 0 0 32px rgba(245,197,24,0.25);
-    }
+    .logo-icon { width: 56px; height: 56px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 16px; box-shadow: 0 0 32px rgba(245,197,24,0.25); }
 
     .logo-title { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 3px; color: var(--text); line-height: 1; }
     .logo-sub { font-size: 12px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 6px; }
 
-    .section-label {
-      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 24px;
-      animation: fadeDown 0.6s 0.1s ease both;
-    }
+    .section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; animation: fadeDown 0.6s 0.1s ease both; }
 
-    #barrios-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px; width: 100%; max-width: 900px;
-      animation: fadeUp 0.6s 0.2s ease both;
-    }
+    #barrios-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; width: 100%; max-width: 900px; animation: fadeUp 0.6s 0.2s ease both; }
 
-    .barrio-btn {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 28px 24px; cursor: pointer;
-      transition: all 0.2s ease; text-align: left; position: relative; overflow: hidden;
-    }
-
-    .barrio-btn::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(245,197,24,0.06), transparent);
-      opacity: 0; transition: opacity 0.2s;
-    }
-
+    .barrio-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; cursor: pointer; transition: all 0.2s ease; text-align: left; position: relative; overflow: hidden; }
+    .barrio-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(245,197,24,0.06), transparent); opacity: 0; transition: opacity 0.2s; }
     .barrio-btn:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(245,197,24,0.12); }
     .barrio-btn:hover::before { opacity: 1; }
     .barrio-btn-icon { font-size: 28px; margin-bottom: 14px; display: block; }
@@ -112,114 +64,55 @@
     .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
     .empty-state p { margin-top: 12px; font-size: 14px; }
 
-    #screen-login {
-      display: none; position: fixed; inset: 0; z-index: 100;
-      background: rgba(10,13,19,0.85); backdrop-filter: blur(12px);
-      align-items: center; justify-content: center; animation: fadeIn 0.25s ease;
-    }
-
+    /* ── LOGIN ── */
+    #screen-login { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(10,13,19,0.85); backdrop-filter: blur(12px); align-items: center; justify-content: center; animation: fadeIn 0.25s ease; }
     #screen-login.active { display: flex; }
 
-    .login-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 24px; padding: 48px 40px; width: 100%; max-width: 420px;
-      position: relative; animation: scaleIn 0.3s ease;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-    }
+    .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 48px 40px; width: 100%; max-width: 420px; position: relative; animation: scaleIn 0.3s ease; box-shadow: 0 32px 80px rgba(0,0,0,0.5); }
 
-    .login-back {
-      position: absolute; top: 20px; left: 20px; background: none; border: none;
-      color: var(--muted); cursor: pointer; font-size: 22px; line-height: 1;
-      padding: 4px 8px; border-radius: 8px; transition: color 0.2s, background 0.2s;
-    }
-
+    .login-back { position: absolute; top: 20px; left: 20px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 22px; line-height: 1; padding: 4px 8px; border-radius: 8px; transition: color 0.2s, background 0.2s; }
     .login-back:hover { color: var(--text); background: var(--border); }
+
     .login-header { text-align: center; margin-bottom: 36px; }
 
-    .login-barrio-tag {
-      display: inline-block; background: rgba(245,197,24,0.1);
-      border: 1px solid rgba(245,197,24,0.25); color: var(--accent);
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
-    }
+    .login-barrio-tag { display: inline-block; background: rgba(245,197,24,0.1); border: 1px solid rgba(245,197,24,0.25); color: var(--accent); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
 
     .login-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; color: var(--text); }
     .login-subtitle { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
     .field { margin-bottom: 18px; }
-
     .field label { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-
-    .field input, .field select {
-      width: 100%; background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 12px; padding: 14px 16px; color: var(--text);
-      font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
+    .field input, .field select, .field textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .field textarea { resize: vertical; min-height: 100px; }
     .field select option { background: var(--surface2); }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,197,24,0.1); }
 
-    .field input:focus, .field select:focus {
-      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,197,24,0.1);
-    }
-
-    .btn-login {
-      width: 100%; padding: 15px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border: none; border-radius: 12px; color: #0a0d13;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
-      cursor: pointer; letter-spacing: 0.5px;
-      transition: opacity 0.2s, transform 0.2s; margin-top: 8px;
-    }
-
+    .btn-login { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 12px; color: #0a0d13; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s, transform 0.2s; margin-top: 8px; }
     .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-login:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    .login-error {
-      background: rgba(224,85,85,0.1); border: 1px solid rgba(224,85,85,0.3);
-      color: var(--danger); border-radius: 10px; padding: 12px 16px;
-      font-size: 13px; margin-top: 16px; display: none;
-    }
-
+    .login-error { background: rgba(224,85,85,0.1); border: 1px solid rgba(224,85,85,0.3); color: var(--danger); border-radius: 10px; padding: 12px 16px; font-size: 13px; margin-top: 16px; display: none; }
     .login-error.visible { display: block; }
 
+    /* ── TOPBAR COMPARTIDO ── */
+    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; border-bottom: 1px solid var(--border); background: rgba(17,22,32,0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 10; }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .topbar-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--accent); }
+    .role-badge { background: rgba(245,197,24,0.1); border: 1px solid rgba(245,197,24,0.2); color: var(--accent); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+    .role-badge-tecnico { background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.2); color: var(--success); }
+    .btn-logout { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 8px 16px; border-radius: 10px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+    .btn-logout:hover { color: var(--danger); border-color: var(--danger); }
+
+    /* ── DASHBOARD ADMIN ── */
     #screen-admin { display: none; position: relative; z-index: 1; min-height: 100vh; flex-direction: column; }
     #screen-admin.active { display: flex; }
 
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 32px; border-bottom: 1px solid var(--border);
-      background: rgba(17,22,32,0.8); backdrop-filter: blur(10px);
-      position: sticky; top: 0; z-index: 10;
-    }
-
-    .topbar-left { display: flex; align-items: center; gap: 16px; }
-    .topbar-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--accent); }
-
-    .role-badge {
-      background: rgba(245,197,24,0.1); border: 1px solid rgba(245,197,24,0.2);
-      color: var(--accent); font-size: 11px; letter-spacing: 1.5px;
-      text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
-    }
-
-    .btn-logout {
-      background: var(--surface2); border: 1px solid var(--border);
-      color: var(--muted); font-family: 'DM Sans', sans-serif;
-      font-size: 13px; padding: 8px 16px; border-radius: 10px;
-      cursor: pointer; transition: color 0.2s, border-color 0.2s;
-    }
-
-    .btn-logout:hover { color: var(--danger); border-color: var(--danger); }
-
     .admin-content { padding: 40px 32px; max-width: 1100px; margin: 0 auto; width: 100%; }
-
     .admin-greeting { margin-bottom: 40px; animation: fadeDown 0.5s ease both; }
-
     .admin-greeting h1 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; line-height: 1; }
     .admin-greeting p { color: var(--muted); margin-top: 8px; font-size: 14px; }
 
     .stats-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 40px; animation: fadeUp 0.5s 0.1s ease both; }
-
     .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
     .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
     .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 1px; color: var(--accent); line-height: 1; }
@@ -227,30 +120,13 @@
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
     .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border: none; border-radius: 10px; color: #0a0d13;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
-      padding: 10px 20px; cursor: pointer; transition: opacity 0.2s;
-    }
-
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 10px; color: #0a0d13; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; padding: 10px 20px; cursor: pointer; transition: opacity 0.2s; }
     .btn-primary:hover { opacity: 0.85; }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .table-wrap {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-      animation: fadeUp 0.5s 0.2s ease both; margin-bottom: 40px;
-    }
-
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; animation: fadeUp 0.5s 0.2s ease both; margin-bottom: 40px; }
     table { width: 100%; border-collapse: collapse; }
-
-    thead th {
-      background: var(--surface2); padding: 14px 20px; text-align: left;
-      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--muted); font-weight: 500;
-    }
-
+    thead th { background: var(--surface2); padding: 14px 20px; text-align: left; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); font-weight: 500; }
     tbody tr { border-top: 1px solid var(--border); transition: background 0.15s; }
     tbody tr:hover { background: var(--surface2); }
     tbody td { padding: 16px 20px; font-size: 14px; color: var(--text); }
@@ -265,39 +141,77 @@
     .badge-intendente { background: rgba(245,197,24,0.1); color: var(--accent); border: 1px solid rgba(245,197,24,0.25); }
     .badge-administrador { background: rgba(224,123,0,0.1); color: var(--accent2); border: 1px solid rgba(224,123,0,0.25); }
 
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 200;
-      background: rgba(10,13,19,0.85); backdrop-filter: blur(8px);
-      align-items: center; justify-content: center;
-    }
+    /* ── DASHBOARD TÉCNICO ── */
+    #screen-tecnico { display: none; position: relative; z-index: 1; min-height: 100vh; flex-direction: column; }
+    #screen-tecnico.active { display: flex; }
 
-    .modal-overlay.active { display: flex; }
+    .tecnico-content { padding: 40px 32px; max-width: 800px; margin: 0 auto; width: 100%; }
 
-    .modal-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 40px; width: 100%; max-width: 440px;
-      animation: scaleIn 0.25s ease; max-height: 90vh; overflow-y: auto;
-    }
+    .tecnico-header { margin-bottom: 36px; animation: fadeDown 0.5s ease both; }
+    .tecnico-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; line-height: 1; }
+    .tecnico-header p { color: var(--muted); margin-top: 6px; font-size: 14px; }
 
-    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; margin-bottom: 24px; }
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; margin-bottom: 24px; animation: fadeUp 0.5s ease both; }
 
-    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .form-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--accent); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
 
-    .btn-secondary {
-      flex: 1; background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 10px; color: var(--muted); font-family: 'DM Sans', sans-serif;
-      font-size: 14px; padding: 12px; cursor: pointer; transition: color 0.2s;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-    .btn-secondary:hover { color: var(--text); }
+    .radio-group { display: flex; gap: 12px; margin-top: 4px; }
 
-    .msg-success {
-      background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.3);
-      color: var(--success); border-radius: 10px; padding: 12px 16px;
-      font-size: 13px; margin-top: 16px; display: none;
-    }
+    .radio-option { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: border-color 0.2s, background 0.2s; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+    .radio-option input[type="radio"] { accent-color: var(--accent); width: 16px; height: 16px; }
+    .radio-option.selected { border-color: var(--accent); background: rgba(245,197,24,0.05); }
 
+    /* Trabajos de lista */
+    .trabajo-item { display: flex; align-items: center; justify-content: space-between; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; transition: border-color 0.2s; }
+    .trabajo-item.seleccionado { border-color: var(--accent); background: rgba(245,197,24,0.04); }
+
+    .trabajo-item-left { display: flex; align-items: center; gap: 12px; }
+    .trabajo-check { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
+    .trabajo-nombre { font-size: 14px; font-weight: 500; }
+    .trabajo-creditos { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .trabajo-unidades { display: flex; align-items: center; gap: 8px; }
+    .trabajo-unidades label { font-size: 12px; color: var(--muted); }
+    .trabajo-unidades input { width: 60px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; text-align: center; outline: none; }
+    .trabajo-unidades input:focus { border-color: var(--accent); }
+
+    /* Extras */
+    .extras-list { margin-bottom: 16px; }
+    .extra-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; position: relative; }
+    .extra-item-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; }
+    .extra-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 18px; padding: 0 4px; transition: color 0.2s; line-height: 1; }
+    .extra-remove:hover { color: var(--danger); }
+    .extra-minutos { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .extra-minutos label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .extra-minutos input { width: 80px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; text-align: center; outline: none; }
+    .extra-minutos input:focus { border-color: var(--accent); }
+    .extra-creditos-preview { font-size: 12px; color: var(--accent); margin-left: 8px; }
+
+    .btn-add-extra { background: none; border: 1px dashed var(--border); border-radius: 10px; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 12px; width: 100%; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+    .btn-add-extra:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* Resumen créditos */
+    .creditos-resumen { background: rgba(245,197,24,0.05); border: 1px solid rgba(245,197,24,0.2); border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+    .creditos-resumen-label { font-size: 13px; color: var(--muted); }
+    .creditos-resumen-valor { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--accent); letter-spacing: 1px; }
+
+    .btn-guardar-visita { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 14px; color: #0a0d13; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.2s; letter-spacing: 0.5px; }
+    .btn-guardar-visita:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-guardar-visita:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .msg-success { background: rgba(62,207,142,0.1); border: 1px solid rgba(62,207,142,0.3); color: var(--success); border-radius: 10px; padding: 12px 16px; font-size: 13px; margin-top: 16px; display: none; }
     .msg-success.visible { display: block; }
+
+    /* ── MODALES ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(10,13,19,0.85); backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+    .modal-overlay.active { display: flex; }
+    .modal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; width: 100%; max-width: 440px; animation: scaleIn 0.25s ease; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; margin-bottom: 24px; }
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .btn-secondary { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 12px; cursor: pointer; transition: color 0.2s; }
+    .btn-secondary:hover { color: var(--text); }
 
     @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeUp   { from { opacity: 0; transform: translateY(16px);  } to { opacity: 1; transform: translateY(0); } }
@@ -305,13 +219,13 @@
     @keyframes scaleIn  { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
 
     .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 60px auto; }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
     @media (max-width: 600px) {
       .login-card { padding: 36px 24px; margin: 16px; }
-      .admin-content { padding: 24px 16px; }
+      .admin-content, .tecnico-content { padding: 24px 16px; }
       .topbar { padding: 16px; }
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -326,14 +240,9 @@
   </div>
   <div class="section-label">Seleccioná tu barrio</div>
   <div id="barrios-grid"><div class="spinner"></div></div>
-  <button onclick="abrirLoginAdmin()" style="
-    margin-top: 48px; background: none; border: 1px solid var(--border);
-    color: var(--muted); font-family: 'DM Sans', sans-serif;
-    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 10px 24px; border-radius: 20px; cursor: pointer;
-    transition: color 0.2s, border-color 0.2s;
-  " onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'"
-     onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
+  <button onclick="abrirLoginAdmin()" style="margin-top:48px;background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:10px 24px;border-radius:20px;cursor:pointer;transition:color 0.2s,border-color 0.2s;"
+    onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'"
+    onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
     Acceso administrativo
   </button>
 </div>
@@ -347,14 +256,8 @@
       <div class="login-title">Bienvenido</div>
       <div class="login-subtitle">Ingresá tus credenciales para continuar</div>
     </div>
-    <div class="field">
-      <label>Email</label>
-      <input type="email" id="login-email" placeholder="tu@email.com" />
-    </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" />
-    </div>
+    <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="tu@email.com" /></div>
+    <div class="field"><label>Contraseña</label><input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()" /></div>
     <button class="btn-login" id="btn-login" onclick="doLogin()">Ingresar</button>
     <div class="login-error" id="login-error"></div>
   </div>
@@ -374,18 +277,10 @@
       <h1>Panel de Control</h1>
       <p>Gestioná barrios, usuarios y el sistema completo.</p>
     </div>
-
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">Barrios activos</div>
-        <div class="stat-value" id="stat-barrios">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Usuarios registrados</div>
-        <div class="stat-value" id="stat-usuarios">—</div>
-      </div>
+      <div class="stat-card"><div class="stat-label">Barrios activos</div><div class="stat-value" id="stat-barrios">—</div></div>
+      <div class="stat-card"><div class="stat-label">Usuarios registrados</div><div class="stat-value" id="stat-usuarios">—</div></div>
     </div>
-
     <div class="section-header">
       <div class="section-title">Barrios</div>
       <button class="btn-primary" onclick="abrirModalBarrio()">+ Nuevo barrio</button>
@@ -393,12 +288,9 @@
     <div class="table-wrap">
       <table>
         <thead><tr><th>Barrio</th><th>Créditos disponibles</th></tr></thead>
-        <tbody id="admin-barrios-tbody">
-          <tr><td colspan="2" style="text-align:center;color:var(--muted);padding:32px">Cargando...</td></tr>
-        </tbody>
+        <tbody id="admin-barrios-tbody"><tr><td colspan="2" style="text-align:center;color:var(--muted);padding:32px">Cargando...</td></tr></tbody>
       </table>
     </div>
-
     <div class="section-header">
       <div class="section-title">Usuarios</div>
       <button class="btn-primary" onclick="abrirModalUsuario()">+ Nuevo usuario</button>
@@ -406,11 +298,97 @@
     <div class="table-wrap">
       <table>
         <thead><tr><th>Nombre</th><th>Rol</th><th>Barrio asignado</th></tr></thead>
-        <tbody id="admin-usuarios-tbody">
-          <tr><td colspan="3" style="text-align:center;color:var(--muted);padding:32px">Cargando...</td></tr>
-        </tbody>
+        <tbody id="admin-usuarios-tbody"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:32px">Cargando...</td></tr></tbody>
       </table>
     </div>
+    <div class="section-header">
+      <div class="section-title">Tipos de trabajo</div>
+      <button class="btn-primary" onclick="abrirModalTrabajo()">+ Nuevo tipo</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Trabajo</th><th>Minutos</th><th>Créditos</th><th>Acciones</th></tr></thead>
+        <tbody id="admin-trabajos-tbody"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:32px">Cargando...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PANTALLA 4: DASHBOARD TÉCNICO ══ -->
+<div id="screen-tecnico">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">ControlLux360</div>
+      <div class="role-badge role-badge-tecnico">Técnico</div>
+      <div id="tecnico-barrio-tag" style="font-size:13px;color:var(--muted)"></div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+  <div class="tecnico-content">
+    <div class="tecnico-header">
+      <h1>Registrar Visita</h1>
+      <p id="tecnico-nombre-label">Completá los datos de la visita de hoy.</p>
+    </div>
+
+    <!-- Datos de la visita -->
+    <div class="form-card">
+      <div class="form-card-title">🕐 Datos de la visita</div>
+      <div class="form-row">
+        <div class="field"><label>Hora de ingreso</label><input type="time" id="hora-ingreso" /></div>
+        <div class="field"><label>Hora de egreso</label><input type="time" id="hora-egreso" /></div>
+      </div>
+      <div class="field" style="margin-top:8px">
+        <label>¿Ingresaste solo o acompañado?</label>
+        <div class="radio-group">
+          <label class="radio-option" id="opt-solo" onclick="toggleAcompanante('solo')">
+            <input type="radio" name="acompanado" value="solo" checked /> Solo
+          </label>
+          <label class="radio-option" id="opt-acompanado" onclick="toggleAcompanante('acompanado')">
+            <input type="radio" name="acompanado" value="acompanado" /> Acompañado
+          </label>
+        </div>
+      </div>
+      <div class="field" id="campo-acompanante" style="display:none">
+        <label>Nombre y apellido del acompañante</label>
+        <input type="text" id="nombre-acompanante" placeholder="Ej: Carlos García" />
+      </div>
+    </div>
+
+    <!-- Informe de recorrida -->
+    <div class="form-card">
+      <div class="form-card-title">📋 Informe de recorrida</div>
+      <div class="field">
+        <label>Novedades y fallas detectadas</label>
+        <textarea id="informe-recorrida" placeholder="Describí las novedades de la recorrida, fallas encontradas, estado general del alumbrado..."></textarea>
+      </div>
+    </div>
+
+    <!-- Intervenciones de lista fija -->
+    <div class="form-card">
+      <div class="form-card-title">🔧 Intervenciones realizadas</div>
+      <div id="lista-trabajos-tecnico"><div class="spinner"></div></div>
+    </div>
+
+    <!-- Trabajos extras -->
+    <div class="form-card">
+      <div class="form-card-title">➕ Trabajos extras</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Trabajos que no están en la lista. Requieren aprobación del intendente.</p>
+      <div class="extras-list" id="extras-list"></div>
+      <button class="btn-add-extra" onclick="agregarExtra()">+ Agregar trabajo extra</button>
+    </div>
+
+    <!-- Resumen y guardar -->
+    <div class="creditos-resumen">
+      <div>
+        <div class="creditos-resumen-label">Créditos a descontar (lista fija)</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Los extras se descontarán tras aprobación</div>
+      </div>
+      <div class="creditos-resumen-valor" id="creditos-total">0</div>
+    </div>
+
+    <div class="login-error" id="visita-error" style="margin-bottom:16px"></div>
+    <div class="msg-success" id="visita-success">✓ Visita registrada correctamente.</div>
+    <button class="btn-guardar-visita" id="btn-guardar-visita" onclick="guardarVisita()">Guardar visita</button>
   </div>
 </div>
 
@@ -418,10 +396,7 @@
 <div class="modal-overlay" id="modal-barrio">
   <div class="modal-card">
     <div class="modal-title">Nuevo Barrio</div>
-    <div class="field">
-      <label>Nombre del barrio</label>
-      <input type="text" id="nuevo-barrio-nombre" placeholder="Ej: Los Pinos" />
-    </div>
+    <div class="field"><label>Nombre del barrio</label><input type="text" id="nuevo-barrio-nombre" placeholder="Ej: Los Pinos" /></div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="cerrarModalBarrio()">Cancelar</button>
       <button class="btn-primary" style="flex:1" onclick="crearBarrio()">Crear</button>
@@ -433,18 +408,9 @@
 <div class="modal-overlay" id="modal-usuario">
   <div class="modal-card">
     <div class="modal-title">Nuevo Usuario</div>
-    <div class="field">
-      <label>Nombre completo</label>
-      <input type="text" id="nuevo-usuario-nombre" placeholder="Ej: Juan Pérez" />
-    </div>
-    <div class="field">
-      <label>Email</label>
-      <input type="email" id="nuevo-usuario-email" placeholder="juan@email.com" />
-    </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input type="password" id="nuevo-usuario-password" placeholder="Mínimo 6 caracteres" />
-    </div>
+    <div class="field"><label>Nombre completo</label><input type="text" id="nuevo-usuario-nombre" placeholder="Ej: Juan Pérez" /></div>
+    <div class="field"><label>Email</label><input type="email" id="nuevo-usuario-email" placeholder="juan@email.com" /></div>
+    <div class="field"><label>Contraseña</label><input type="password" id="nuevo-usuario-password" placeholder="Mínimo 6 caracteres" /></div>
     <div class="field">
       <label>Rol</label>
       <select id="nuevo-usuario-rol" onchange="toggleBarrioSelect()">
@@ -455,15 +421,30 @@
     </div>
     <div class="field" id="campo-barrio" style="display:none">
       <label>Barrio asignado</label>
-      <select id="nuevo-usuario-barrio">
-        <option value="">Seleccioná un barrio</option>
-      </select>
+      <select id="nuevo-usuario-barrio"><option value="">Seleccioná un barrio</option></select>
     </div>
     <div class="login-error" id="usuario-error"></div>
     <div class="msg-success" id="usuario-success">✓ Usuario creado correctamente.</div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="cerrarModalUsuario()">Cancelar</button>
       <button class="btn-primary" style="flex:1" id="btn-crear-usuario" onclick="crearUsuario()">Crear usuario</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: TIPO DE TRABAJO ══ -->
+<div class="modal-overlay" id="modal-trabajo">
+  <div class="modal-card">
+    <div class="modal-title" id="modal-trabajo-title">Nuevo Tipo de Trabajo</div>
+    <div class="field"><label>Nombre del trabajo</label><input type="text" id="trabajo-nombre" placeholder="Ej: Cambio de fusible" /></div>
+    <div class="field"><label>Tiempo estimado (minutos)</label><input type="number" id="trabajo-minutos" placeholder="Ej: 20" min="1" oninput="calcularCreditosPreview()" /></div>
+    <div style="background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.15);border-radius:10px;padding:12px 16px;margin-bottom:8px;font-size:13px;color:var(--muted)">
+      Créditos calculados: <strong id="creditos-preview" style="color:var(--accent)">—</strong>
+    </div>
+    <div class="login-error" id="trabajo-error"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="cerrarModalTrabajo()">Cancelar</button>
+      <button class="btn-primary" style="flex:1" id="btn-guardar-trabajo" onclick="guardarTrabajo()">Guardar</button>
     </div>
   </div>
 </div>
@@ -476,33 +457,34 @@
 
   let barrioSeleccionado = null;
   let barriosCache = [];
+  let tiposTrabajoCache = [];
+  let trabajoEditandoId = null;
+  let extrasCount = 0;
+  let perfilActual = null;
 
+  // ── INIT ──
   window.addEventListener('DOMContentLoaded', async () => {
     const { data: { session } } = await sb.auth.getSession();
-    if (session) {
-      await mostrarDashboard(session.user);
-    } else {
-      await cargarBarrios();
-    }
+    if (session) await mostrarDashboard(session.user);
+    else await cargarBarrios();
   });
 
+  // ── BARRIOS ──
   async function cargarBarrios() {
     const grid = document.getElementById('barrios-grid');
-    const { data, error } = await sb.from('barrios').select('*').order('nombre');
+    const { data } = await sb.from('barrios').select('*').order('nombre');
     barriosCache = data || [];
-    if (error || !data?.length) {
-      grid.innerHTML = `<div class="empty-state">💡<p>No hay barrios registrados aún.<br>El administrador debe crear el primero.</p></div>`;
+    if (!data?.length) {
+      grid.innerHTML = `<div class="empty-state">💡<p>No hay barrios registrados aún.</p></div>`;
       return;
     }
     grid.innerHTML = data.map((b, i) => `
-      <button class="barrio-btn" style="animation:fadeUp 0.5s ${i*0.06}s ease both"
-              onclick="seleccionarBarrio('${b.id}','${b.nombre}')">
+      <button class="barrio-btn" style="animation:fadeUp 0.5s ${i*0.06}s ease both" onclick="seleccionarBarrio('${b.id}','${b.nombre}')">
         <span class="barrio-btn-icon">🏘️</span>
         <span class="barrio-btn-name">${b.nombre}</span>
         <span class="barrio-btn-meta">${b.creditos_disponibles} créditos disponibles</span>
         <span class="barrio-btn-arrow">→</span>
-      </button>
-    `).join('');
+      </button>`).join('');
   }
 
   function seleccionarBarrio(id, nombre) {
@@ -530,91 +512,84 @@
     setTimeout(() => document.getElementById('login-email').focus(), 100);
   }
 
+  // ── LOGIN ──
   async function doLogin() {
-    const email    = document.getElementById('login-email').value.trim();
+    const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
-    const btn      = document.getElementById('btn-login');
-    const errDiv   = document.getElementById('login-error');
-
+    const btn = document.getElementById('btn-login');
+    const errDiv = document.getElementById('login-error');
     if (!email || !password) return;
-    btn.disabled = true;
-    btn.textContent = 'Ingresando...';
+    btn.disabled = true; btn.textContent = 'Ingresando...';
     errDiv.classList.remove('visible');
 
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
-
     if (error) {
       errDiv.textContent = 'Email o contraseña incorrectos.';
       errDiv.classList.add('visible');
-      btn.disabled = false;
-      btn.textContent = 'Ingresar';
-      return;
+      btn.disabled = false; btn.textContent = 'Ingresar'; return;
     }
 
     const { data: perfil } = await sb.from('perfiles').select('*').eq('id', data.user.id).single();
-
     if (!perfil) {
       errDiv.textContent = 'No se encontró tu perfil. Contactá al administrador.';
       errDiv.classList.add('visible');
-      await sb.auth.signOut();
-      btn.disabled = false;
-      btn.textContent = 'Ingresar';
-      return;
+      await sb.auth.signOut(); btn.disabled = false; btn.textContent = 'Ingresar'; return;
     }
 
     if (perfil.rol !== 'administrador' && perfil.barrio_id !== barrioSeleccionado?.id) {
       errDiv.textContent = 'No tenés acceso a este barrio.';
       errDiv.classList.add('visible');
-      await sb.auth.signOut();
-      btn.disabled = false;
-      btn.textContent = 'Ingresar';
-      return;
+      await sb.auth.signOut(); btn.disabled = false; btn.textContent = 'Ingresar'; return;
     }
 
     document.getElementById('screen-login').classList.remove('active');
-    btn.disabled = false;
-    btn.textContent = 'Ingresar';
+    btn.disabled = false; btn.textContent = 'Ingresar';
     await mostrarDashboard(data.user, perfil);
   }
 
+  // ── DASHBOARD SEGÚN ROL ──
   async function mostrarDashboard(user, perfil = null) {
     if (!perfil) {
       const { data } = await sb.from('perfiles').select('*').eq('id', user.id).single();
       perfil = data;
     }
+    perfilActual = perfil;
     document.getElementById('screen-barrios').style.display = 'none';
+
     if (perfil?.rol === 'administrador') {
       document.getElementById('screen-admin').classList.add('active');
       await cargarDatosAdmin();
+    } else if (perfil?.rol === 'tecnico') {
+      await cargarDashboardTecnico(perfil);
+      document.getElementById('screen-tecnico').classList.add('active');
     }
   }
 
+  // ── ADMIN ──
   async function cargarDatosAdmin() {
-    const [{ count: cBarrios }, { count: cUsuarios }, { data: barrios }, { data: usuarios }] = await Promise.all([
+    const [{ count: cB }, { count: cU }, { data: barrios }, { data: usuarios }, { data: trabajos }] = await Promise.all([
       sb.from('barrios').select('*', { count: 'exact', head: true }),
       sb.from('perfiles').select('*', { count: 'exact', head: true }),
       sb.from('barrios').select('*').order('nombre'),
       sb.from('perfiles').select('*, barrios(nombre)').order('nombre'),
+      sb.from('tipos_trabajo').select('*').order('nombre'),
     ]);
 
     barriosCache = barrios || [];
-    document.getElementById('stat-barrios').textContent  = cBarrios ?? '—';
-    document.getElementById('stat-usuarios').textContent = cUsuarios ?? '—';
+    tiposTrabajoCache = trabajos || [];
+    document.getElementById('stat-barrios').textContent = cB ?? '—';
+    document.getElementById('stat-usuarios').textContent = cU ?? '—';
 
     const tbody = document.getElementById('admin-barrios-tbody');
     tbody.innerHTML = !barrios?.length
       ? `<tr><td colspan="2" style="text-align:center;color:var(--muted);padding:32px">No hay barrios aún.</td></tr>`
       : barrios.map(b => {
           const pct = Math.min(100, (b.creditos_disponibles / 100) * 100);
-          return `<tr>
-            <td><strong>${b.nombre}</strong></td>
-            <td>
-              <div class="credits-bar-wrap">
-                <div class="credits-bar"><div class="credits-bar-fill" style="width:${pct}%"></div></div>
-                <span class="credits-text">${b.creditos_disponibles} / 100</span>
-              </div>
-            </td>
-          </tr>`;
+          return `<tr><td><strong>${b.nombre}</strong></td><td>
+            <div class="credits-bar-wrap">
+              <div class="credits-bar"><div class="credits-bar-fill" style="width:${pct}%"></div></div>
+              <span class="credits-text">${b.creditos_disponibles} / 100</span>
+            </div></td></tr>`;
         }).join('');
 
     const tbodyU = document.getElementById('admin-usuarios-tbody');
@@ -625,18 +600,24 @@
           <td><span class="badge-rol badge-${u.rol}">${u.rol}</span></td>
           <td>${u.barrios?.nombre ?? '<span style="color:var(--muted)">Todos los barrios</span>'}</td>
         </tr>`).join('');
+
+    const tbodyT = document.getElementById('admin-trabajos-tbody');
+    tbodyT.innerHTML = !trabajos?.length
+      ? `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:32px">No hay tipos de trabajo.</td></tr>`
+      : trabajos.map(t => `<tr>
+          <td><strong>${t.nombre}</strong></td>
+          <td>${t.minutos} min</td>
+          <td><span style="color:var(--accent);font-weight:600">${t.creditos}</span></td>
+          <td>
+            <button onclick="editarTrabajo('${t.id}','${t.nombre}',${t.minutos})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;margin-right:8px;transition:color 0.2s" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">✏️ Editar</button>
+            <button onclick="eliminarTrabajo('${t.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;transition:color 0.2s" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">🗑️ Eliminar</button>
+          </td>
+        </tr>`).join('');
   }
 
-  function abrirModalBarrio() {
-    document.getElementById('nuevo-barrio-nombre').value = '';
-    document.getElementById('modal-barrio').classList.add('active');
-    setTimeout(() => document.getElementById('nuevo-barrio-nombre').focus(), 100);
-  }
-
-  function cerrarModalBarrio() {
-    document.getElementById('modal-barrio').classList.remove('active');
-  }
-
+  // ── MODAL BARRIO ──
+  function abrirModalBarrio() { document.getElementById('nuevo-barrio-nombre').value = ''; document.getElementById('modal-barrio').classList.add('active'); setTimeout(() => document.getElementById('nuevo-barrio-nombre').focus(), 100); }
+  function cerrarModalBarrio() { document.getElementById('modal-barrio').classList.remove('active'); }
   async function crearBarrio() {
     const nombre = document.getElementById('nuevo-barrio-nombre').value.trim();
     if (!nombre) return;
@@ -644,99 +625,288 @@
     if (!error) { cerrarModalBarrio(); await cargarDatosAdmin(); await cargarBarrios(); }
   }
 
+  // ── MODAL USUARIO ──
   function abrirModalUsuario() {
     ['nuevo-usuario-nombre','nuevo-usuario-email','nuevo-usuario-password'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('nuevo-usuario-rol').value = '';
-    document.getElementById('nuevo-usuario-barrio').value = '';
     document.getElementById('campo-barrio').style.display = 'none';
     document.getElementById('usuario-error').classList.remove('visible');
     document.getElementById('usuario-success').classList.remove('visible');
     document.getElementById('btn-crear-usuario').disabled = false;
     document.getElementById('btn-crear-usuario').textContent = 'Crear usuario';
-
     const sel = document.getElementById('nuevo-usuario-barrio');
     sel.innerHTML = '<option value="">Seleccioná un barrio</option>';
     barriosCache.forEach(b => sel.innerHTML += `<option value="${b.id}">${b.nombre}</option>`);
-
     document.getElementById('modal-usuario').classList.add('active');
-    setTimeout(() => document.getElementById('nuevo-usuario-nombre').focus(), 100);
   }
 
-  function cerrarModalUsuario() {
-    document.getElementById('modal-usuario').classList.remove('active');
-  }
-
-  function toggleBarrioSelect() {
-    const rol = document.getElementById('nuevo-usuario-rol').value;
-    document.getElementById('campo-barrio').style.display = rol ? 'block' : 'none';
-  }
+  function cerrarModalUsuario() { document.getElementById('modal-usuario').classList.remove('active'); }
+  function toggleBarrioSelect() { document.getElementById('campo-barrio').style.display = document.getElementById('nuevo-usuario-rol').value ? 'block' : 'none'; }
 
   async function crearUsuario() {
-    const nombre   = document.getElementById('nuevo-usuario-nombre').value.trim();
-    const email    = document.getElementById('nuevo-usuario-email').value.trim();
+    const nombre = document.getElementById('nuevo-usuario-nombre').value.trim();
+    const email = document.getElementById('nuevo-usuario-email').value.trim();
     const password = document.getElementById('nuevo-usuario-password').value;
-    const rol      = document.getElementById('nuevo-usuario-rol').value;
+    const rol = document.getElementById('nuevo-usuario-rol').value;
     const barrioId = document.getElementById('nuevo-usuario-barrio').value;
-
     const errDiv = document.getElementById('usuario-error');
     const sucDiv = document.getElementById('usuario-success');
-    errDiv.classList.remove('visible');
-    sucDiv.classList.remove('visible');
-
-    if (!nombre || !email || !password || !rol) {
-      errDiv.textContent = 'Completá todos los campos obligatorios.';
-      errDiv.classList.add('visible');
-      return;
-    }
-
-    if (!barrioId) {
-      errDiv.textContent = 'Seleccioná un barrio para este usuario.';
-      errDiv.classList.add('visible');
-      return;
-    }
-
+    errDiv.classList.remove('visible'); sucDiv.classList.remove('visible');
+    if (!nombre || !email || !password || !rol) { errDiv.textContent = 'Completá todos los campos.'; errDiv.classList.add('visible'); return; }
+    if (!barrioId) { errDiv.textContent = 'Seleccioná un barrio.'; errDiv.classList.add('visible'); return; }
     const btn = document.getElementById('btn-crear-usuario');
-    btn.disabled = true;
-    btn.textContent = 'Creando...';
-
+    btn.disabled = true; btn.textContent = 'Creando...';
     const { data: authData, error: authError } = await sb.auth.signUp({ email, password });
-
-    if (authError) {
-      errDiv.textContent = 'Error: ' + authError.message;
-      errDiv.classList.add('visible');
-      btn.disabled = false;
-      btn.textContent = 'Crear usuario';
-      return;
-    }
-
+    if (authError) { errDiv.textContent = 'Error: ' + authError.message; errDiv.classList.add('visible'); btn.disabled = false; btn.textContent = 'Crear usuario'; return; }
     const userId = authData.user?.id;
-    if (!userId) {
-      errDiv.textContent = 'No se pudo obtener el ID del usuario. Intentá de nuevo.';
-      errDiv.classList.add('visible');
-      btn.disabled = false;
-      btn.textContent = 'Crear usuario';
-      return;
-    }
-
+    if (!userId) { errDiv.textContent = 'No se pudo obtener el ID. Intentá de nuevo.'; errDiv.classList.add('visible'); btn.disabled = false; btn.textContent = 'Crear usuario'; return; }
     const { error: perfilError } = await sb.from('perfiles').insert({ id: userId, nombre, rol, barrio_id: barrioId });
-
-    if (perfilError) {
-      errDiv.textContent = 'Error al guardar perfil: ' + perfilError.message;
-      errDiv.classList.add('visible');
-      btn.disabled = false;
-      btn.textContent = 'Crear usuario';
-      return;
-    }
-
-    sucDiv.classList.add('visible');
-    btn.textContent = 'Crear usuario';
+    if (perfilError) { errDiv.textContent = 'Error al guardar perfil: ' + perfilError.message; errDiv.classList.add('visible'); btn.disabled = false; btn.textContent = 'Crear usuario'; return; }
+    sucDiv.classList.add('visible'); btn.textContent = 'Crear usuario';
     await cargarDatosAdmin();
     setTimeout(() => cerrarModalUsuario(), 1500);
   }
 
+  // ── MODAL TIPOS DE TRABAJO ──
+  function abrirModalTrabajo() {
+    trabajoEditandoId = null;
+    document.getElementById('modal-trabajo-title').textContent = 'Nuevo Tipo de Trabajo';
+    document.getElementById('trabajo-nombre').value = '';
+    document.getElementById('trabajo-minutos').value = '';
+    document.getElementById('creditos-preview').textContent = '—';
+    document.getElementById('trabajo-error').classList.remove('visible');
+    document.getElementById('btn-guardar-trabajo').textContent = 'Guardar';
+    document.getElementById('modal-trabajo').classList.add('active');
+  }
+
+  function editarTrabajo(id, nombre, minutos) {
+    trabajoEditandoId = id;
+    document.getElementById('modal-trabajo-title').textContent = 'Editar Tipo de Trabajo';
+    document.getElementById('trabajo-nombre').value = nombre;
+    document.getElementById('trabajo-minutos').value = minutos;
+    calcularCreditosPreview();
+    document.getElementById('trabajo-error').classList.remove('visible');
+    document.getElementById('btn-guardar-trabajo').textContent = 'Actualizar';
+    document.getElementById('modal-trabajo').classList.add('active');
+  }
+
+  function cerrarModalTrabajo() { document.getElementById('modal-trabajo').classList.remove('active'); }
+
+  function calcularCreditosPreview() {
+    const min = parseFloat(document.getElementById('trabajo-minutos').value);
+    if (!min || min <= 0) { document.getElementById('creditos-preview').textContent = '—'; return; }
+    const creditos = Math.round((min / 4.8) * 10) / 10;
+    document.getElementById('creditos-preview').textContent = creditos + ' créditos';
+  }
+
+  async function guardarTrabajo() {
+    const nombre = document.getElementById('trabajo-nombre').value.trim();
+    const minutos = parseFloat(document.getElementById('trabajo-minutos').value);
+    const errDiv = document.getElementById('trabajo-error');
+    errDiv.classList.remove('visible');
+    if (!nombre || !minutos) { errDiv.textContent = 'Completá todos los campos.'; errDiv.classList.add('visible'); return; }
+    const creditos = Math.round((minutos / 4.8) * 10) / 10;
+    if (trabajoEditandoId) {
+      await sb.from('tipos_trabajo').update({ nombre, minutos, creditos }).eq('id', trabajoEditandoId);
+    } else {
+      await sb.from('tipos_trabajo').insert({ nombre, minutos, creditos });
+    }
+    cerrarModalTrabajo();
+    await cargarDatosAdmin();
+  }
+
+  async function eliminarTrabajo(id) {
+    if (!confirm('¿Eliminár este tipo de trabajo?')) return;
+    await sb.from('tipos_trabajo').delete().eq('id', id);
+    await cargarDatosAdmin();
+  }
+
+  // ── DASHBOARD TÉCNICO ──
+  async function cargarDashboardTecnico(perfil) {
+    const { data: barrio } = await sb.from('barrios').select('nombre').eq('id', perfil.barrio_id).single();
+    document.getElementById('tecnico-barrio-tag').textContent = barrio?.nombre ?? '';
+    document.getElementById('tecnico-nombre-label').textContent = `Hola, ${perfil.nombre}. Completá los datos de la visita de hoy.`;
+
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2,'0');
+    const mm = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('hora-ingreso').value = `${hh}:${mm}`;
+
+    const { data: trabajos } = await sb.from('tipos_trabajo').select('*').order('nombre');
+    tiposTrabajoCache = trabajos || [];
+    renderizarListaTrabajos();
+  }
+
+  function renderizarListaTrabajos() {
+    const container = document.getElementById('lista-trabajos-tecnico');
+    if (!tiposTrabajoCache.length) {
+      container.innerHTML = `<p style="color:var(--muted);font-size:14px">No hay tipos de trabajo cargados aún.</p>`;
+      return;
+    }
+    container.innerHTML = tiposTrabajoCache.map(t => `
+      <div class="trabajo-item" id="trabajo-item-${t.id}">
+        <div class="trabajo-item-left">
+          <input type="checkbox" class="trabajo-check" id="check-${t.id}" onchange="toggleTrabajo('${t.id}')" />
+          <div>
+            <div class="trabajo-nombre">${t.nombre}</div>
+            <div class="trabajo-creditos">${t.creditos} créditos × unidades</div>
+          </div>
+        </div>
+        <div class="trabajo-unidades" id="unidades-wrap-${t.id}" style="opacity:0.3;pointer-events:none">
+          <label>Unidades:</label>
+          <input type="number" id="unidades-${t.id}" value="1" min="1" oninput="actualizarCreditos()" />
+        </div>
+      </div>`).join('');
+  }
+
+  function toggleTrabajo(id) {
+    const checked = document.getElementById(`check-${id}`).checked;
+    const item = document.getElementById(`trabajo-item-${id}`);
+    const wrap = document.getElementById(`unidades-wrap-${id}`);
+    item.classList.toggle('seleccionado', checked);
+    wrap.style.opacity = checked ? '1' : '0.3';
+    wrap.style.pointerEvents = checked ? 'auto' : 'none';
+    actualizarCreditos();
+  }
+
+  function actualizarCreditos() {
+    let total = 0;
+    tiposTrabajoCache.forEach(t => {
+      const checked = document.getElementById(`check-${t.id}`)?.checked;
+      if (checked) {
+        const unidades = parseInt(document.getElementById(`unidades-${t.id}`)?.value) || 1;
+        total += t.creditos * unidades;
+      }
+    });
+    document.getElementById('creditos-total').textContent = Math.round(total * 10) / 10;
+  }
+
+  // ── EXTRAS ──
+  function agregarExtra() {
+    extrasCount++;
+    const id = extrasCount;
+    const div = document.createElement('div');
+    div.className = 'extra-item';
+    div.id = `extra-${id}`;
+    div.innerHTML = `
+      <div class="extra-item-row">
+        <div class="field" style="margin:0">
+          <label>Descripción del trabajo</label>
+          <input type="text" id="extra-desc-${id}" placeholder="Describí el trabajo realizado..." />
+        </div>
+        <button class="extra-remove" onclick="eliminarExtra(${id})">✕</button>
+      </div>
+      <div class="extra-minutos">
+        <label>Tiempo:</label>
+        <input type="number" id="extra-min-${id}" min="1" placeholder="min" oninput="actualizarCreditosExtra(${id})" />
+        <span class="extra-creditos-preview" id="extra-cred-${id}"></span>
+      </div>`;
+    document.getElementById('extras-list').appendChild(div);
+  }
+
+  function eliminarExtra(id) { document.getElementById(`extra-${id}`)?.remove(); }
+
+  function actualizarCreditosExtra(id) {
+    const min = parseFloat(document.getElementById(`extra-min-${id}`).value);
+    const span = document.getElementById(`extra-cred-${id}`);
+    if (!min || min <= 0) { span.textContent = ''; return; }
+    span.textContent = `= ${Math.round((min / 4.8) * 10) / 10} créditos (pendiente aprobación)`;
+  }
+
+  // ── GUARDAR VISITA ──
+  async function guardarVisita() {
+    const errDiv = document.getElementById('visita-error');
+    const sucDiv = document.getElementById('visita-success');
+    errDiv.classList.remove('visible'); sucDiv.classList.remove('visible');
+
+    const horaIngreso = document.getElementById('hora-ingreso').value;
+    const horaEgreso = document.getElementById('hora-egreso').value;
+    const acompanado = document.querySelector('input[name="acompanado"]:checked')?.value === 'acompanado';
+    const nombreAcompanante = document.getElementById('nombre-acompanante').value.trim();
+    const informe = document.getElementById('informe-recorrida').value.trim();
+
+    if (!horaIngreso || !horaEgreso) { errDiv.textContent = 'Completá las horas de ingreso y egreso.'; errDiv.classList.add('visible'); return; }
+    if (acompanado && !nombreAcompanante) { errDiv.textContent = 'Ingresá el nombre del acompañante.'; errDiv.classList.add('visible'); return; }
+
+    const btn = document.getElementById('btn-guardar-visita');
+    btn.disabled = true; btn.textContent = 'Guardando...';
+
+    const { data: { user } } = await sb.auth.getUser();
+
+    const { data: visita, error: visitaError } = await sb.from('visitas').insert({
+      barrio_id: perfilActual.barrio_id,
+      tecnico_id: user.id,
+      fecha: new Date().toISOString(),
+      hora_ingreso: horaIngreso,
+      hora_egreso: horaEgreso,
+      acompanado,
+      nombre_acompanante: acompanado ? nombreAcompanante : null,
+      informe: informe || null,
+      aprobada: false,
+    }).select().single();
+
+    if (visitaError) { errDiv.textContent = 'Error al guardar la visita.'; errDiv.classList.add('visible'); btn.disabled = false; btn.textContent = 'Guardar visita'; return; }
+
+    // Guardar trabajos de lista fija
+    const trabajosSeleccionados = [];
+    let creditosConsumidos = 0;
+    tiposTrabajoCache.forEach(t => {
+      const checked = document.getElementById(`check-${t.id}`)?.checked;
+      if (checked) {
+        const unidades = parseInt(document.getElementById(`unidades-${t.id}`)?.value) || 1;
+        const creditos = Math.round(t.creditos * unidades * 10) / 10;
+        creditosConsumidos += creditos;
+        trabajosSeleccionados.push({ visita_id: visita.id, tipo_trabajo_id: t.id, unidades, creditos_consumidos: creditos });
+      }
+    });
+
+    if (trabajosSeleccionados.length > 0) {
+      await sb.from('trabajos_realizados').insert(trabajosSeleccionados);
+      // Descontar créditos del barrio
+      const { data: barrio } = await sb.from('barrios').select('creditos_disponibles').eq('id', perfilActual.barrio_id).single();
+      const nuevosCreditos = Math.max(0, (barrio?.creditos_disponibles || 0) - creditosConsumidos);
+      await sb.from('barrios').update({ creditos_disponibles: nuevosCreditos }).eq('id', perfilActual.barrio_id);
+    }
+
+    // Guardar extras
+    const extrasItems = document.querySelectorAll('.extra-item');
+    for (const item of extrasItems) {
+      const idNum = item.id.replace('extra-', '');
+      const desc = document.getElementById(`extra-desc-${idNum}`)?.value.trim();
+      const min = parseFloat(document.getElementById(`extra-min-${idNum}`)?.value);
+      if (desc && min > 0) {
+        const creditos = Math.round((min / 4.8) * 10) / 10;
+        await sb.from('trabajos_extras').insert({ visita_id: visita.id, descripcion: desc, minutos: min, creditos, aprobado: false });
+      }
+    }
+
+    sucDiv.classList.add('visible');
+    btn.textContent = 'Guardar visita';
+    // Limpiar formulario
+    setTimeout(() => {
+      document.getElementById('hora-egreso').value = '';
+      document.getElementById('informe-recorrida').value = '';
+      document.getElementById('extras-list').innerHTML = '';
+      extrasCount = 0;
+      renderizarListaTrabajos();
+      actualizarCreditos();
+      sucDiv.classList.remove('visible');
+      btn.disabled = false;
+    }, 2000);
+  }
+
+  // ── ACOMPAÑANTE ──
+  function toggleAcompanante(val) {
+    document.getElementById('opt-solo').classList.toggle('selected', val === 'solo');
+    document.getElementById('opt-acompanado').classList.toggle('selected', val === 'acompanado');
+    document.getElementById('campo-acompanante').style.display = val === 'acompanado' ? 'block' : 'none';
+  }
+
+  // ── LOGOUT ──
   async function doLogout() {
     await sb.auth.signOut();
-    document.getElementById('screen-admin').classList.remove('active');
+    perfilActual = null;
+    ['screen-admin','screen-tecnico'].forEach(id => document.getElementById(id).classList.remove('active'));
     document.getElementById('screen-barrios').style.display = 'flex';
     await cargarBarrios();
   }
