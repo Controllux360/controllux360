@@ -333,6 +333,7 @@
     <!-- Datos de la visita -->
     <div class="form-card">
       <div class="form-card-title">🕐 Datos de la visita</div>
+      <div class="field"><label>Fecha de la visita</label><input type="date" id="fecha-visita" /></div>
       <div class="form-row">
         <div class="field"><label>Hora de ingreso</label><input type="time" id="hora-ingreso" /></div>
         <div class="field"><label>Hora de egreso</label><input type="time" id="hora-egreso" /></div>
@@ -730,7 +731,11 @@
     const now = new Date();
     const hh = String(now.getHours()).padStart(2,'0');
     const mm = String(now.getMinutes()).padStart(2,'0');
+    const yyyy = now.getFullYear();
+    const mes = String(now.getMonth()+1).padStart(2,'0');
+    const dia = String(now.getDate()).padStart(2,'0');
     document.getElementById('hora-ingreso').value = `${hh}:${mm}`;
+    document.getElementById('fecha-visita').value = `${yyyy}-${mes}-${dia}`;
 
     const { data: trabajos } = await sb.from('tipos_trabajo').select('*').order('nombre');
     tiposTrabajoCache = trabajos || [];
@@ -821,10 +826,12 @@
 
     const horaIngreso = document.getElementById('hora-ingreso').value;
     const horaEgreso = document.getElementById('hora-egreso').value;
+    const fechaVisita = document.getElementById('fecha-visita').value;
     const acompanado = document.querySelector('input[name="acompanado"]:checked')?.value === 'acompanado';
     const nombreAcompanante = document.getElementById('nombre-acompanante').value.trim();
     const informe = document.getElementById('informe-recorrida').value.trim();
 
+    if (!fechaVisita) { errDiv.textContent = 'Seleccioná la fecha de la visita.'; errDiv.classList.add('visible'); return; }
     if (!horaIngreso || !horaEgreso) { errDiv.textContent = 'Completá las horas de ingreso y egreso.'; errDiv.classList.add('visible'); return; }
     if (acompanado && !nombreAcompanante) { errDiv.textContent = 'Ingresá el nombre del acompañante.'; errDiv.classList.add('visible'); return; }
 
@@ -836,7 +843,7 @@
     const { data: visita, error: visitaError } = await sb.from('visitas').insert({
       barrio_id: perfilActual.barrio_id,
       tecnico_id: user.id,
-      fecha: new Date().toISOString(),
+      fecha: fechaVisita ? new Date(fechaVisita).toISOString() : new Date().toISOString(),
       hora_ingreso: horaIngreso,
       hora_egreso: horaEgreso,
       acompanado,
