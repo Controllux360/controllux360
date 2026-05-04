@@ -213,6 +213,29 @@
     .btn-secondary { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 12px; cursor: pointer; transition: color 0.2s; }
     .btn-secondary:hover { color: var(--text); }
 
+    #screen-intendente { display: none; position: relative; z-index: 1; min-height: 100vh; flex-direction: column; }
+    #screen-intendente.active { display: flex; }
+
+    .visita-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+    .visita-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .visita-fecha { font-weight: 600; font-size: 15px; }
+    .visita-tecnico { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .visita-horas { font-size: 12px; color: var(--muted); text-align: right; }
+    .visita-creditos-badge { background: rgba(245,197,24,0.1); border: 1px solid rgba(245,197,24,0.2); color: var(--accent); font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 600; margin-top: 4px; display: inline-block; }
+    .visita-informe { font-size: 13px; color: var(--muted); margin: 10px 0; padding: 10px 14px; background: var(--surface); border-radius: 8px; border-left: 3px solid var(--border); }
+    .visita-trabajos { margin-top: 10px; }
+    .visita-trabajo-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+    .visita-trabajo-row:last-child { border-bottom: none; }
+
+    .extra-card { background: var(--surface2); border: 1px solid rgba(224,85,85,0.2); border-radius: 14px; padding: 20px; margin-bottom: 12px; }
+    .extra-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .extra-desc { font-weight: 500; font-size: 14px; }
+    .extra-info { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .btn-aprobar { background: linear-gradient(135deg, var(--success), #2ea87a); border: none; border-radius: 8px; color: #0a0d13; font-family: 'DM Sans',sans-serif; font-size: 13px; font-weight: 700; padding: 8px 16px; cursor: pointer; transition: opacity 0.2s; }
+    .btn-aprobar:hover { opacity: 0.85; }
+    .btn-rechazar { background: none; border: 1px solid var(--danger); border-radius: 8px; color: var(--danger); font-family: 'DM Sans',sans-serif; font-size: 13px; padding: 8px 16px; cursor: pointer; transition: opacity 0.2s; margin-left: 8px; }
+    .btn-rechazar:hover { opacity: 0.7; }
+
     @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeUp   { from { opacity: 0; transform: translateY(16px);  } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
@@ -393,6 +416,83 @@
   </div>
 </div>
 
+<!-- ══ PANTALLA 5: DASHBOARD INTENDENTE ══ -->
+<div id="screen-intendente">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">ControlLux360</div>
+      <div class="role-badge" style="background:rgba(62,207,142,0.1);border-color:rgba(62,207,142,0.2);color:var(--success)">Intendente</div>
+      <div id="intendente-barrio-tag" style="font-size:13px;color:var(--muted)"></div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Cerrar sesión</button>
+  </div>
+  <div class="admin-content">
+
+    <!-- Saludo -->
+    <div class="admin-greeting">
+      <h1 id="intendente-titulo">Panel del Barrio</h1>
+      <p id="intendente-subtitulo">Seguí el estado del servicio y los créditos disponibles.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Créditos disponibles</div>
+        <div class="stat-value" id="int-creditos-disponibles">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Créditos usados este mes</div>
+        <div class="stat-value" id="int-creditos-usados">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Visitas este mes</div>
+        <div class="stat-value" id="int-visitas-mes">—</div>
+      </div>
+    </div>
+
+    <!-- Barra de créditos -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:40px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-size:13px;color:var(--muted)">Uso de créditos del mes</span>
+        <span id="int-creditos-pct" style="font-size:13px;color:var(--accent);font-weight:600">0%</span>
+      </div>
+      <div class="credits-bar" style="height:10px">
+        <div class="credits-bar-fill" id="int-barra-creditos" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Filtro por mes -->
+    <div class="section-header">
+      <div class="section-title">Historial de visitas</div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <select id="int-filtro-mes" onchange="filtrarVisitas()" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none">
+          <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+          <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
+          <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+          <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+        <select id="int-filtro-anio" onchange="filtrarVisitas()" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none">
+        </select>
+      </div>
+    </div>
+
+    <!-- Tabla visitas -->
+    <div class="table-wrap" id="int-visitas-wrap">
+      <div id="int-visitas-container"><div class="spinner"></div></div>
+    </div>
+
+    <!-- Trabajos extras pendientes -->
+    <div class="section-header" style="margin-top:40px">
+      <div class="section-title">Trabajos extras pendientes</div>
+      <div id="int-extras-badge" style="display:none;background:rgba(224,85,85,0.15);border:1px solid rgba(224,85,85,0.3);color:var(--danger);font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600"></div>
+    </div>
+    <div class="table-wrap">
+      <div id="int-extras-container"><div class="spinner"></div></div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ══ MODAL: NUEVO BARRIO ══ -->
 <div class="modal-overlay" id="modal-barrio">
   <div class="modal-card">
@@ -563,6 +663,9 @@
     } else if (perfil?.rol === 'tecnico') {
       await cargarDashboardTecnico(perfil);
       document.getElementById('screen-tecnico').classList.add('active');
+    } else if (perfil?.rol === 'intendente') {
+      await cargarDashboardIntendente(perfil);
+      document.getElementById('screen-intendente').classList.add('active');
     }
   }
 
@@ -909,11 +1012,158 @@
     document.getElementById('campo-acompanante').style.display = val === 'acompanado' ? 'block' : 'none';
   }
 
+  // ── DASHBOARD INTENDENTE ──
+  async function cargarDashboardIntendente(perfil) {
+    const { data: barrio } = await sb.from('barrios').select('*').eq('id', perfil.barrio_id).single();
+    document.getElementById('intendente-barrio-tag').textContent = barrio?.nombre ?? '';
+    document.getElementById('intendente-titulo').textContent = barrio?.nombre ?? 'Panel del Barrio';
+    document.getElementById('intendente-subtitulo').textContent = `Bienvenido, ${perfil.nombre}. Seguí el estado del servicio.`;
+
+    // Créditos
+    const creditosDisp = barrio?.creditos_disponibles ?? 100;
+    const creditosUsados = 100 - creditosDisp;
+    const pct = Math.min(100, Math.round((creditosUsados / 100) * 100));
+    document.getElementById('int-creditos-disponibles').textContent = creditosDisp;
+    document.getElementById('int-creditos-usados').textContent = creditosUsados;
+    document.getElementById('int-barra-creditos').style.width = pct + '%';
+    document.getElementById('int-creditos-pct').textContent = pct + '%';
+
+    // Filtro año/mes
+    const now = new Date();
+    const anioSel = document.getElementById('int-filtro-anio');
+    anioSel.innerHTML = '';
+    for (let y = now.getFullYear(); y >= 2024; y--) {
+      anioSel.innerHTML += `<option value="${y}">${y}</option>`;
+    }
+    document.getElementById('int-filtro-mes').value = now.getMonth() + 1;
+
+    await filtrarVisitas();
+    await cargarExtrasIntendente(perfil.barrio_id);
+  }
+
+  async function filtrarVisitas() {
+    const mes = parseInt(document.getElementById('int-filtro-mes').value);
+    const anio = parseInt(document.getElementById('int-filtro-anio').value);
+    const barrio_id = perfilActual.barrio_id;
+
+    const desde = new Date(anio, mes - 1, 1).toISOString();
+    const hasta = new Date(anio, mes, 1).toISOString();
+
+    const { data: visitas } = await sb.from('visitas')
+      .select('*, perfiles(nombre)')
+      .eq('barrio_id', barrio_id)
+      .gte('fecha', desde)
+      .lt('fecha', hasta)
+      .order('fecha', { ascending: false });
+
+    const container = document.getElementById('int-visitas-container');
+    document.getElementById('int-visitas-mes').textContent = visitas?.length ?? 0;
+
+    if (!visitas?.length) {
+      container.innerHTML = `<p style="text-align:center;color:var(--muted);padding:32px">No hay visitas registradas en este período.</p>`;
+      return;
+    }
+
+    let html = '';
+    for (const v of visitas) {
+      const { data: trabajos } = await sb.from('trabajos_realizados')
+        .select('*, tipos_trabajo(nombre, creditos)')
+        .eq('visita_id', v.id);
+
+      const totalCreditos = trabajos?.reduce((sum, t) => sum + (t.creditos_consumidos || 0), 0) ?? 0;
+      const fecha = new Date(v.fecha).toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+      html += `<div class="visita-card">
+        <div class="visita-card-header">
+          <div>
+            <div class="visita-fecha">${fecha}</div>
+            <div class="visita-tecnico">Técnico: ${v.perfiles?.nombre ?? '—'}</div>
+            ${v.acompanado ? `<div class="visita-tecnico">Acompañante: ${v.nombre_acompanante}</div>` : ''}
+          </div>
+          <div style="text-align:right">
+            <div class="visita-horas">Ingreso: ${v.hora_ingreso ?? '—'} | Egreso: ${v.hora_egreso ?? '—'}</div>
+            <div class="visita-creditos-badge">${totalCreditos} créditos consumidos</div>
+          </div>
+        </div>
+        ${v.informe ? `<div class="visita-informe">📋 ${v.informe}</div>` : ''}
+        ${trabajos?.length ? `
+        <div class="visita-trabajos">
+          ${trabajos.map(t => `
+            <div class="visita-trabajo-row">
+              <span>${t.tipos_trabajo?.nombre ?? '—'} × ${t.unidades ?? 1}</span>
+              <span style="color:var(--accent);font-weight:600">${t.creditos_consumidos} cred.</span>
+            </div>`).join('')}
+        </div>` : ''}
+      </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  async function cargarExtrasIntendente(barrio_id) {
+    const { data: visitas } = await sb.from('visitas').select('id').eq('barrio_id', barrio_id);
+    const visitaIds = visitas?.map(v => v.id) ?? [];
+
+    if (!visitaIds.length) {
+      document.getElementById('int-extras-container').innerHTML = `<p style="text-align:center;color:var(--muted);padding:32px">No hay trabajos extras pendientes.</p>`;
+      return;
+    }
+
+    const { data: extras } = await sb.from('trabajos_extras')
+      .select('*, visitas(fecha, perfiles(nombre))')
+      .in('visita_id', visitaIds)
+      .eq('aprobado', false)
+      .order('created_at', { ascending: false });
+
+    const badge = document.getElementById('int-extras-badge');
+    if (extras?.length) {
+      badge.style.display = 'block';
+      badge.textContent = extras.length + ' pendiente' + (extras.length > 1 ? 's' : '');
+    }
+
+    const container = document.getElementById('int-extras-container');
+    if (!extras?.length) {
+      container.innerHTML = `<p style="text-align:center;color:var(--muted);padding:32px">No hay trabajos extras pendientes de aprobación.</p>`;
+      return;
+    }
+
+    container.innerHTML = extras.map(e => {
+      const fecha = e.visitas?.fecha ? new Date(e.visitas.fecha).toLocaleDateString('es-AR') : '—';
+      return `<div class="extra-card" id="extra-card-${e.id}">
+        <div class="extra-card-header">
+          <div>
+            <div class="extra-desc">${e.descripcion}</div>
+            <div class="extra-info">Visita del ${fecha} · ${e.minutos} min · <strong style="color:var(--accent)">${e.creditos} créditos</strong></div>
+          </div>
+          <div>
+            <button class="btn-aprobar" onclick="aprobarExtra('${e.id}')">✓ Aprobar</button>
+            <button class="btn-rechazar" onclick="rechazarExtra('${e.id}')">✕ Rechazar</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  async function aprobarExtra(id) {
+    const { data: extra } = await sb.from('trabajos_extras').select('creditos, visita_id').eq('id', id).single();
+    await sb.from('trabajos_extras').update({ aprobado: true }).eq('id', id);
+    // Descontar créditos del barrio
+    const { data: barrio } = await sb.from('barrios').select('creditos_disponibles').eq('id', perfilActual.barrio_id).single();
+    const nuevos = Math.max(0, (barrio?.creditos_disponibles ?? 0) - (extra?.creditos ?? 0));
+    await sb.from('barrios').update({ creditos_disponibles: nuevos }).eq('id', perfilActual.barrio_id);
+    document.getElementById(`extra-card-${id}`)?.remove();
+    await cargarDashboardIntendente(perfilActual);
+  }
+
+  async function rechazarExtra(id) {
+    await sb.from('trabajos_extras').update({ aprobado: false, pago_directo: true }).eq('id', id);
+    document.getElementById(`extra-card-${id}`)?.remove();
+  }
+
   // ── LOGOUT ──
   async function doLogout() {
     await sb.auth.signOut();
     perfilActual = null;
-    ['screen-admin','screen-tecnico'].forEach(id => document.getElementById(id).classList.remove('active'));
+    ['screen-admin','screen-tecnico','screen-intendente'].forEach(id => document.getElementById(id).classList.remove('active'));
     document.getElementById('screen-barrios').style.display = 'flex';
     await cargarBarrios();
   }
