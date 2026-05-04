@@ -1046,8 +1046,9 @@
     const anio = parseInt(document.getElementById('int-filtro-anio').value);
     const barrio_id = perfilActual.barrio_id;
 
-    const desde = new Date(anio, mes - 1, 1).toISOString();
-    const hasta = new Date(anio, mes, 1).toISOString();
+    const mesStr = String(mes).padStart(2,'0');
+    const desde = `${anio}-${mesStr}-01`;
+    const hasta = mes === 12 ? `${anio+1}-01-01` : `${anio}-${String(mes+1).padStart(2,'0')}-01`;
 
     const { data: visitas } = await sb.from('visitas')
       .select('*, perfiles(nombre)')
