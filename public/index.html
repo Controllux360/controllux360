@@ -1053,20 +1053,25 @@
     const { data: visitas } = await sb.from('visitas')
       .select('*, perfiles(nombre)')
       .eq('barrio_id', barrio_id)
-      .filter('fecha', 'gte', desde + 'T00:00:00')
-      .filter('fecha', 'lt', hasta + 'T00:00:00')
       .order('fecha', { ascending: false });
 
     const container = document.getElementById('int-visitas-container');
-    document.getElementById('int-visitas-mes').textContent = visitas?.length ?? 0;
 
-    if (!visitas?.length) {
+    // Filtrar por mes y año en el frontend
+    const visitasFiltradas = (visitas || []).filter(v => {
+      const d = new Date(v.fecha);
+      return d.getFullYear() === anio && (d.getMonth() + 1) === mes;
+    });
+
+    document.getElementById('int-visitas-mes').textContent = visitasFiltradas.length;
+
+    if (!visitasFiltradas.length) {
       container.innerHTML = `<p style="text-align:center;color:var(--muted);padding:32px">No hay visitas registradas en este período.</p>`;
       return;
     }
 
     let html = '';
-    for (const v of visitas) {
+    for (const v of visitasFiltradas) {
       const { data: trabajos } = await sb.from('trabajos_realizados')
         .select('*, tipos_trabajo(nombre, creditos)')
         .eq('visita_id', v.id);
