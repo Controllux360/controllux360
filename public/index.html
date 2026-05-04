@@ -1051,7 +1051,7 @@
     const hasta = mes === 12 ? `${anio+1}-01-01` : `${anio}-${String(mes+1).padStart(2,'0')}-01`;
 
     const { data: visitas } = await sb.from('visitas')
-      .select('*, perfiles(nombre)')
+      .select('*')
       .eq('barrio_id', barrio_id)
       .order('fecha', { ascending: false });
 
@@ -1083,7 +1083,7 @@
         <div class="visita-card-header">
           <div>
             <div class="visita-fecha">${fecha}</div>
-            <div class="visita-tecnico">Técnico: ${v.perfiles?.nombre ?? '—'}</div>
+            <div class="visita-tecnico">Técnico registrado</div>
             ${v.acompanado ? `<div class="visita-tecnico">Acompañante: ${v.nombre_acompanante}</div>` : ''}
           </div>
           <div style="text-align:right">
@@ -1115,7 +1115,7 @@
     }
 
     const { data: extras } = await sb.from('trabajos_extras')
-      .select('*, visitas(fecha, perfiles(nombre))')
+      .select('*')
       .in('visita_id', visitaIds)
       .eq('aprobado', false)
       .order('created_at', { ascending: false });
@@ -1133,12 +1133,11 @@
     }
 
     container.innerHTML = extras.map(e => {
-      const fecha = e.visitas?.fecha ? new Date(e.visitas.fecha).toLocaleDateString('es-AR') : '—';
       return `<div class="extra-card" id="extra-card-${e.id}">
         <div class="extra-card-header">
           <div>
             <div class="extra-desc">${e.descripcion}</div>
-            <div class="extra-info">Visita del ${fecha} · ${e.minutos} min · <strong style="color:var(--accent)">${e.creditos} créditos</strong></div>
+            <div class="extra-info">${e.minutos} min · <strong style="color:var(--accent)">${e.creditos} créditos</strong></div>
           </div>
           <div>
             <button class="btn-aprobar" onclick="aprobarExtra('${e.id}')">✓ Aprobar</button>
