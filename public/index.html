@@ -1053,8 +1053,8 @@
     const { data: visitas } = await sb.from('visitas')
       .select('*, perfiles(nombre)')
       .eq('barrio_id', barrio_id)
-      .gte('fecha', desde)
-      .lt('fecha', hasta)
+      .filter('fecha', 'gte', desde + 'T00:00:00')
+      .filter('fecha', 'lt', hasta + 'T00:00:00')
       .order('fecha', { ascending: false });
 
     const container = document.getElementById('int-visitas-container');
